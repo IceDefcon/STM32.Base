@@ -24,7 +24,7 @@ void delay_us(unsigned int time)
 	// Clears the current value and the count flag
 	//
 	SysTick->VAL = 0;
-	
+
 	//
 	// Waits until the count ends
 	//
