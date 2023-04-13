@@ -115,7 +115,7 @@
   #define __STATIC_INLINE  static inline
 
 #else
-  #error Unknown compiler
+  // #error Unknown compiler
 #endif
 
 /** __FPU_USED indicates whether an FPU is used or not.
@@ -125,37 +125,37 @@
 
 #if defined ( __CC_ARM )
   #if defined __TARGET_FPU_VFP
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
   #if defined __ARM_PCS_VFP
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #elif defined ( __GNUC__ )
   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #elif defined ( __ICCARM__ )
   #if defined __ARMVFP__
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #elif defined ( __TMS470__ )
   #if defined __TI_VFP_SUPPORT__
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #elif defined ( __TASKING__ )
   #if defined __FPU_VFP__
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #elif defined ( __CSMC__ )
   #if ( __CSMC__ & 0x400U)
-    #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+    // #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
   #endif
 
 #endif

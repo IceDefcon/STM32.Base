@@ -1,41 +1,39 @@
-PRJ_NAME   = Blink
-CC         = arm-none-eabi-gcc
-SRCDIR     = src
-SRC        = $(wildcard $(SRCDIR)/*.c)
-ASRC       = $(wildcard $(SRCDIR)/*.s)
-OBJ        = $(SRC:.c=.o) $(ASRC:.s=.o)
-OBJCOPY    = arm-none-eabi-objcopy
-OBJDUMP    = arm-none-eabi-objdump
-PROGRAMMER = openocd
-PGFLAGS    = -f openocd.cfg -c "program $(PRJ_NAME).elf verify reset" -c shutdown
+#
+# Author: Ice.Marek
+# 2023 IceNET Technology
+#
+TARGET 		= armlink
+GCC  		= arm-none-eabi-gcc
+OBJDUMP		= arm-none-eabi-objdump
+NASM 		= nasm 
+
+AFLAGS 		= -f elf64
+
 DEVICE     = STM32F103xB
 OPT       ?= -Og
-LDSCRIPT   = linker/stm32f103c8tx.ld
 CFLAGS     = -fdata-sections -ffunction-sections -g3 -Wall -mcpu=cortex-m3 -mlittle-endian -mthumb -I inc/ -D $(DEVICE) $(OPT)
-ASFLAGS    =  $(CFLAGS)
-LDFLAGS    = -T $(LDSCRIPT) -Wl,--gc-sections --specs=nano.specs --specs=nosys.specs
 
-.PHONY: all clean hex bin
+LDSCRIPT    := linker/stm32f103c8tx.ld -Wl,--gc-sections --specs=nano.specs --specs=nosys.specs
 
-all: $(PRJ_NAME).elf
+ASM_SOURCES = src/startup_stm32f103xb.s
+GCC_SOURCES = $(shell find . -name "*.c")
 
-$(PRJ_NAME).elf: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LDFLAGS)
-	arm-none-eabi-size $(PRJ_NAME).elf
+INCLUDES=\
+	-Iinc \
+	-Irtos/include \
+	-Irtos/portable/GCC/ARM_CM3 \
 
-%.o: %.c $(DEPS)
-	$(CC) -MMD -c $(CFLAGS) $< -o $@
+GCC_OBJECTS = $(GCC_SOURCES:.c=.o)
 
-%.o: %.s $(DEPS)
-	$(CC) -MMD -c $(ASFLAGS) $< -o $@
+all: $(TARGET)
 
--include $(SRCDIR)/*.d
+$(TARGET): $(GCC_OBJECTS)
+	$(GCC) $(CFLAGS) $(ASM_SOURCES) -T $(LDSCRIPT) $^ -o $@ 
+
+%.o: %.c
+	$(GCC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 clean:
-	rm -f $(OBJ) $(PRJ_NAME).elf $(PRJ_NAME).hex $(PRJ_NAME).bin $(SRCDIR)/*.d
+	rm -f $(TARGET) $(GCC_OBJECTS) output.map
 
-hex: $(PRJ_NAME).elf
-	$(OBJCOPY) -O ihex $(PRJ_NAME).elf $(PRJ_NAME).hex
-
-bin: $(PRJ_NAME).elf
-	$(OBJCOPY) -O binary $(PRJ_NAME).elf $(PRJ_NAME).bin
+.PHONY: all clean
