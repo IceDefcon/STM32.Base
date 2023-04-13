@@ -4,6 +4,7 @@
 #
 TARGET 		= armlink
 GCC  		= arm-none-eabi-gcc
+OBJCOPY    = arm-none-eabi-objcopy
 OBJDUMP		= arm-none-eabi-objdump
 NASM 		= nasm 
 
@@ -25,7 +26,9 @@ INCLUDES=\
 
 GCC_OBJECTS = $(GCC_SOURCES:.c=.o)
 
-all: $(TARGET)
+all: elf hex bin size
+
+elf: $(TARGET)
 
 $(TARGET): $(GCC_OBJECTS)
 	$(GCC) $(CFLAGS) $(ASM_SOURCES) -T $(LDSCRIPT) $^ -o $@ 
@@ -33,7 +36,16 @@ $(TARGET): $(GCC_OBJECTS)
 %.o: %.c
 	$(GCC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
-clean:
-	rm -f $(TARGET) $(GCC_OBJECTS)
+hex: $(TARGET)
+	$(OBJCOPY) $(TARGET) -O ihex $(TARGET).hex
 
-.PHONY: all clean
+bin: $(TARGET)
+	$(OBJCOPY) $(TARGET) -O binary $(TARGET).bin
+
+size:
+	arm-none-eabi-size $(TARGET)
+
+clean:
+	rm -f $(GCC_OBJECTS) $(TARGET) $(TARGET).hex $(TARGET).bin
+
+.PHONY: all elf hex bin size clean
