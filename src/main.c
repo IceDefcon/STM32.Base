@@ -4,6 +4,12 @@
 #include "stm32f103xb.h"
 
 //
+// FreeRTOS
+//
+#include "FreeRTOS.h"
+#include "task.h"
+
+//
 // Delay function:
 // Uses the SysTick timer to wait for
 // an arbitrary time in microseconds.
