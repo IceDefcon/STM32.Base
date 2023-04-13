@@ -34,6 +34,6 @@ $(TARGET): $(GCC_OBJECTS)
 	$(GCC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 clean:
-	rm -f $(TARGET) $(GCC_OBJECTS) output.map
+	rm -f $(TARGET) $(GCC_OBJECTS)
 
 .PHONY: all clean
