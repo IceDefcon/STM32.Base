@@ -2,12 +2,12 @@
 # Author: Ice.Marek
 # 2023 IceNET Technology
 #
-TARGET 		= ice
+TARGET 		= gpio
 GCC  		= arm-none-eabi-gcc
 OBJCOPY    	= arm-none-eabi-objcopy
 OBJDUMP		= arm-none-eabi-objdump
 
-CFLAGS 		= -mcpu=cortex-m3 --specs=nosys.specs -Wl,-Map="ice.map" \
+CFLAGS 		= -mcpu=cortex-m3 --specs=nosys.specs -Wl,-Map="gpio.map" \
 -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb \
 -Wl,--start-group -lc -lm -Wl,--end-group -D STM32F103xB
 
