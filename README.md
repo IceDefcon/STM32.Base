@@ -1,11 +1,11 @@
 # STM32.Base
 
 1. Research STM32F103C8T6 startup codes
-2. Makefile and Linker script for initial startup
-3. Hook up FreeRTOS
+2. Makefile and Linker script for manual compilation
+3. Test GIPO :: Status LED
 
-# TODO
+# BUILD
 
-1. Program the core board and test Blinky in xTask
+	make
 
 # ICE
